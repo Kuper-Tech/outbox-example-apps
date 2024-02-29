@@ -11,7 +11,7 @@ class RedisConfig < ApplicationConfig
   required :url, :db, :db_sidekiq, :db_outbox, :db_cache
 
   def connection_uri(db_name = :db)
-    uri = URI(dsn)
+    uri = URI(url)
     uri.path = "/#{public_send(db_name)}"
     uri.to_s
   end
