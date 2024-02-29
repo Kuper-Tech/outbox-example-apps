@@ -1,6 +1,6 @@
 # Outbox example apps
 
-This is example applications which uses:
+These are example applications that use:
 - [sbmt-outbox](https://github.com/SberMarket-Tech/sbmt-outbox)
 - [sbmt-kafka_producer](https://github.com/SberMarket-Tech/sbmt-kafka_producer)
 - [sbmt-kafka_consumer](https://github.com/SberMarket-Tech/sbmt-kafka_consumer)
