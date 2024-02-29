@@ -1,0 +1,31 @@
+default: &default
+  owner: "@ruby-platform" # Your team name in Mattermost
+  bucket_size: 16
+  probes:
+    port: <%= ENV.fetch("HEALTH_CHECK_PORT"){ 5555 } %>
+
+  inbox_items:
+    order_inbox_item:
+      partition_size: <%= ENV.fetch('VOYAGE__ORDER_INBOX_ITEM__PARTITION_SIZE'){ '1' } %>
+      partition_strategy: number
+      retention: P3D
+      max_retries: <%= ENV.fetch('VOYAGE__ORDER_INBOX_ITEM__MAX_RETRIES'){ '7' } %>
+      retry_strategies:
+        - exponential_backoff
+      transports:
+        inbox_importers:
+          target: order
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+  bucket_size: 2
+
+staging:
+  <<: *default
+
+production:
+  <<: *default
+  bucket_size: 128

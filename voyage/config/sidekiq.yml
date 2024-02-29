@@ -1,0 +1,4 @@
+:concurrency: <%= ENV.fetch('RAILS_MAX_THREADS', 4).to_i %>
+:queues:
+  - default
+  - inbox

@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/type/money.proto";
+
+package protobuf.order_data;
+
+message Order {
+  enum OrderStatus {
+    PENDING = 0;
+    COMPLETED = 1;
+    CANCELED = 2;
+  }
+
+  string id = 1;
+  string name = 2;
+  int32 qty = 3;
+  OrderStatus status = 4;
+  string description = 5;
+  google.type.Money price = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
+}

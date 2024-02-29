@@ -1,0 +1,22 @@
+version: '7.5'
+
+compose:
+  files:
+    - docker-compose.yml
+
+interaction:
+  bash:
+    description: Open a Bash shell
+    service: kafka
+    command: bash
+
+  kafka:
+    description: Kafka scripts, see more at https://kafka.apache.org/documentation
+    service: kafka
+    subcommands:
+      topics:
+        command: kafka-topics.sh --bootstrap-server kafka:9092
+      consumer:
+        command: kafka-console-consumer.sh --bootstrap-server kafka:9092
+      consumer-groups:
+        command: kafka-consumer-groups.sh --bootstrap-server kafka:9092

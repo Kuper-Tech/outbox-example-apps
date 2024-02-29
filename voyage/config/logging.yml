@@ -1,0 +1,22 @@
+default: &default
+  enabled: true
+  max_nesting_level: 1
+  allow_arrays: false
+  schema:
+    payload: {}
+    named_tags:
+      backtrace: text
+      box_name: text
+      box_partition: long
+      box_type: text
+      trace_id: text
+      worker: long
+development:
+  <<: *default
+  enabled: false
+test:
+  <<: *default
+staging: &staging
+  <<: *default
+production:
+  <<: *staging

@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -e
+
+for file in "$@"
+do
+  if [[ $(dirname $file) == *deps* ]]
+  then
+    outdir="pkg/client"
+  else
+    outdir="pkg/server"
+  fi
+
+  echo "Generating gRPC code from $file to $outdir"
+
+  bundle exec grpc_tools_ruby_protoc \
+    -I api -I deps/services -I deps/googleapis  \
+    --ruby_out="$outdir" --grpc_out="$outdir" \
+    "$file"
+done

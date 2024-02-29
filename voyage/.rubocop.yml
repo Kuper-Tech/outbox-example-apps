@@ -1,0 +1,91 @@
+# We want Exclude directives from different
+# config files to get merged, not overwritten
+inherit_mode:
+  merge:
+    - Exclude
+
+inherit_gem:
+  standard: config/base.yml
+
+AllCops:
+  TargetRubyVersion: 3.3
+  TargetRailsVersion: 7.1
+  NewCops: enable
+  SuggestExtensions: false
+
+require:
+  - standard
+  - rubocop-performance
+  - rubocop-rails
+  - rubocop-rspec
+
+# ===== Style
+
+Style/SingleLineMethods:
+  Enabled: false
+
+Style/EmptyMethod:
+  Enabled: false
+
+# ===== Rails
+
+Rails/NotNullColumn:
+  Enabled: false
+
+Rails/UniqueValidationWithoutIndex:
+  Enabled: false
+
+Rails/SkipsModelValidations:
+  Enabled: false
+
+Rails/HasManyOrHasOneDependent:
+  Enabled: false
+
+Rails/CreateTableWithTimestamps:
+  Enabled: false
+
+Rails/UnknownEnv:
+  Environments:
+    - development
+    - test
+    - staging
+    - production
+
+Rails/RakeEnvironment:
+  Enabled: false
+
+# ===== Rspec
+
+RSpec/AnyInstance:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/LetSetup:
+  Enabled: false
+
+RSpec/StubbedMock:
+  Enabled: false
+
+RSpec/MessageSpies:
+  Enabled: false
+
+RSpec/NestedGroups:
+  Enabled: false
+
+RSpec/EmptyExampleGroup:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
+RSpec/VariableName:
+  Enabled: false
+
+RSpec/FilePath:
+  Exclude:
+    - "**/cops/**/*_spec.rb"

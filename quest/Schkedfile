@@ -1,0 +1,9 @@
+# frozen_string_literal: true
+
+require_relative "config/environment"
+
+Rails.application.load_tasks
+
+Yabeda::Prometheus::Exporter.start_metrics_server! if defined?(Yabeda)
+
+::HttpHealthCheck.run_server_async(port: ENV.fetch("HEALTH_CHECK_PORT").to_i)

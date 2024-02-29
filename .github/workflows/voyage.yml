@@ -1,0 +1,50 @@
+name: Voyage
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ '**' ]
+
+jobs:
+  lint:
+    name: Rubocop
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./voyage
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup Ruby w/ same version as image
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+      - name: Install dependencies
+        run: |
+          docker network create infranet
+          gem install dip
+          dip bundle install
+      - name: Run linter
+        run: dip rubocop
+
+  test:
+    name: Rspec
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./voyage
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup Ruby w/ same version as image
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+      - name: Install dependencies
+        run: |
+          docker network create infranet
+          gem install dip
+          dip provision
+      - name: Run tests
+        run: dip rspec --format RspecJunitFormatter --out test-results/rspec.xml --format documentation
