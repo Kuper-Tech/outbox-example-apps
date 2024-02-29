@@ -1,0 +1,118 @@
+x-environments: &environments
+  HISTFILE: /app/log/.bash_history
+  EDITOR: vim
+  prometheus_multiproc_dir: ./tmp
+  BUNDLE_APP_CONFIG: ../.bundle
+  DATABASE_URL: postgres://postgres:keepinsecret@postgres:5432
+  REDIS_URL: redis://redis:6379
+  KAFKA_BROKERS: kafka.infranet:9092
+
+x-ruby: &ruby
+  build:
+    context: .
+    dockerfile: ./Dockerfile
+    args:
+      # Keep in sync with Gitlab CI configs
+      BASE_IMAGE: ruby:3.3-bookworm
+      POSTGRES_VERSION: '16'
+      RUBYGEMS_VERSION: '3.5.6'
+      BUNDLER_VERSION: '2.5.5'
+  image: quest-dev:1.0.0
+  environment:
+    <<: *environments
+  tmpfs:
+    - /tmp
+  stdin_open: true
+  tty: true
+  working_dir: ${WORK_DIR:-/app}
+  volumes:
+    - ../..:/gems:cached
+    - ..:/app:cached
+    - .psqlrc:/root/.psqlrc:ro
+    # We store Rails cache and gems in volumes to get speed up on Docker for Mac
+    - rails_cache:/app/tmp/cache
+    - bundle:/usr/local/bundle
+  networks:
+    - default
+    - infranet
+
+x-rails-deps: &rails-deps
+  postgres:
+    condition: service_healthy
+  redis:
+    condition: service_healthy
+
+x-rails: &rails
+  <<: *ruby
+  depends_on:
+    <<: *rails-deps
+
+name: voyage
+
+services:
+  backend:
+    <<: *rails
+    command: /bin/bash
+    profiles:
+      - donotstart
+
+  puma:
+    <<: *rails
+    command: bundle exec puma
+    ports:
+      - '3001:3000'
+
+  sidekiq:
+    <<: *rails
+    command: bundle exec sidekiq -C config/sidekiq.yml
+
+  schked:
+    <<: *rails
+    command: bundle exec schked start
+
+  kafka-consumer:
+    <<: *rails
+    depends_on:
+      <<: *rails-deps
+    command: bundle exec kafka_consumer
+
+  outbox:
+    <<: *rails
+    command: bundle exec outbox start
+
+  postgres:
+    image: postgres:16-bookworm
+    volumes:
+      - postgres:/var/lib/postgresql/data
+      - .psqlrc:/root/.psqlrc:ro
+      - ../log:/var/log/psql_history
+    ports:
+      - 5432
+    environment:
+      POSTGRES_PASSWORD: keepinsecret
+    healthcheck:
+      test: pg_isready -U postgres -h 127.0.0.1
+      interval: 10s
+
+  redis:
+    image: redis:7-bookworm
+    environment:
+      ALLOW_EMPTY_PASSWORD: "yes"
+    volumes:
+      - redis:/data
+    ports:
+      - 6379
+    healthcheck:
+      test: redis-cli ping
+      interval: 10s
+
+volumes:
+  bundle:
+  postgres:
+  redis:
+  rails_cache:
+
+networks:
+  infranet:
+    name: infranet
+    external: true

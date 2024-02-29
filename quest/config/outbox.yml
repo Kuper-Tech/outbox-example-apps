@@ -1,0 +1,31 @@
+default: &default
+  bucket_size: 16
+  probes:
+    port: <%= ENV.fetch("HEALTH_CHECK_PORT"){ 5555 } %>
+
+  outbox_items:
+    order_outbox_item:
+      partition_size: <%= ENV.fetch('QUEST__ORDER_OUTBOX_ITEM__PARTITION_SIZE'){ '2' } %>
+      partition_strategy: hash
+      retention: P3D
+      max_retries: <%= ENV.fetch('QUEST__ORDER_OUTBOX_ITEM__MAX_RETRIES'){ '7' } %>
+      retry_strategies:
+        - exponential_backoff
+        - compacted_log
+      transports:
+        sbmt/kafka_producer:
+          topic: <%= ENV.fetch('QUEST__KAFKA__TOPICS__ORDERS'){ 'yc.quest-stand.orders.0' } %>
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+  bucket_size: 2
+
+staging:
+  <<: *default
+
+production:
+  <<: *default
+  bucket_size: 128

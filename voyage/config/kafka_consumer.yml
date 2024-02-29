@@ -1,0 +1,40 @@
+default: &default
+  auth:
+    kind: 'sasl_plaintext'
+    sasl_mechanism: <%= ENV.fetch('KAFKA_SASL_DSN'){ 'SCRAM-SHA-512:kafka_login:kafka_password' }.split(':').first %>
+    sasl_username: <%= ENV.fetch('KAFKA_SASL_DSN'){ 'SCRAM-SHA-512:kafka_login:kafka_password' }.split(':').second %>
+    sasl_password: <%= ENV.fetch('KAFKA_SASL_DSN'){ 'SCRAM-SHA-512:kafka_login:kafka_password' }.split(':').last %>
+  client_id: voyage
+  shutdown_timeout: 120
+  kafka:
+    servers: <%= ENV.fetch('KAFKA_BROKERS'){ 'kafka:9092' } %>
+    kafka_options:
+      auto.offset.reset: 'latest'
+  consumer_groups:
+    orders:
+      name: <%= ENV.fetch('VOYAGE__KAFKA__ORDERS_CONSUMER_GROUP_NAME'){ 'orders' } %><%= ENV.fetch('QUEST__KAFKA__CONSUMER_GROUP_SUFFIX'){ '' } %>
+      topics:
+        - name: <%= ENV.fetch('VOYAGE__KAFKA__TOPICS__ORDERS'){ 'yc.quest-stand.orders.0' } %>
+          consumer:
+            klass: "Sbmt::KafkaConsumer::InboxConsumer"
+            init_attrs:
+              name: "Orders"
+              inbox_item: "OrderInboxItem"
+  probes:
+    port: <%= ENV.fetch('HEALTH_CHECK_PORT') { '9394' } %>
+  metrics:
+    port: <%= ENV.fetch('PROMETHEUS_EXPORTER_PORT') { '9090' } %>
+development:
+  <<: *default
+  auth:
+    kind: 'plaintext'
+test:
+  <<: *default
+  deliver: false
+  wait_on_queue_full: false
+  auth:
+    kind: 'plaintext'
+staging: &staging
+  <<: *default
+production:
+  <<: *staging

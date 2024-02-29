@@ -1,0 +1,76 @@
+version: '7.5'
+
+environment:
+  WORK_DIR: /app/${DIP_WORK_DIR_REL_PATH}
+
+compose:
+  files:
+    - ./.dockerdev/docker-compose.yml
+    - ./.dockerdev/docker-compose.local.yml
+
+interaction:
+  bash:
+    description: Open a Bash shell
+    service: backend
+    command: bash
+
+  bundle:
+    description: Run Bundler commands
+    service: backend
+    command: bundle
+
+  rake:
+    description: Run Rake commands
+    service: backend
+    command: bundle exec rake
+
+  rails:
+    description: Run Rails commands
+    service: backend
+    command: bundle exec rails
+    subcommands:
+      s:
+        description: Run puma available at http://localhost:3000
+        service: puma
+        command: bundle exec puma
+        compose:
+          run_options: [service-ports, use-aliases]
+
+  rspec:
+    description: Run RSpec commands within test environment
+    service: backend
+    environment:
+      RAILS_ENV: test
+    command: bundle exec rspec
+
+  rubocop:
+    description: Lint ruby files
+    service: backend
+    command: bundle exec rubocop
+
+  psql:
+    description: Open Postgres console
+    service: postgres
+    default_args: quest_development
+    command: env PGPASSWORD=keepinsecret psql -h postgres -U postgres
+
+  redis:
+    description: Open a Redis console
+    service: redis
+    command: redis-cli -h redis
+
+  grpc_gen:
+    description: Generate services from .proto files
+    service: backend
+    command: bash -c 'bin/grpc_gen $@' 'grpc_gen'
+
+  setup:
+    description: Install deps
+    service: backend
+    command: bin/setup
+
+provision:
+  - cp -f lefthook-local.dip_example.yml lefthook-local.yml
+  - touch .env.local
+  - dip compose down --volumes
+  - dip setup

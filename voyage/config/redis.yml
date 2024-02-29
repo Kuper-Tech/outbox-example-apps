@@ -1,0 +1,20 @@
+default: &default
+  db: 0
+  db_sidekiq: 1
+  db_cache: 2
+  db_outbox: 3
+
+development:
+  <<: *default
+
+test:
+  db: 15
+  db_sidekiq: 15
+  db_outbox: 15
+  db_cache: 15
+
+staging:
+  <<: *default
+
+production:
+  <<: *default

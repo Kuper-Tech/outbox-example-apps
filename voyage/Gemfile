@@ -1,0 +1,60 @@
+# frozen_string_literal: true
+
+source "https://rubygems.org/"
+
+ruby "~> 3.3"
+
+gem "puma"
+gem "rails", "~> 7.1"
+gem "rails-i18n"
+gem "pg"
+gem "redis"
+gem "anyway_config"
+gem "jsonapi-serializer", "~> 2.0"
+gem "dry-initializer"
+gem "grpc"
+gem "google-protobuf"
+gem "nanoid", "~> 2.0"
+gem "sentry-rails"
+gem "sentry-ruby"
+gem "sentry-sidekiq"
+gem "schked"
+gem "yabeda-activerecord"
+gem "yabeda-prometheus-mmap"
+gem "yabeda-puma-plugin"
+gem "yabeda-rails"
+gem "yabeda-sidekiq"
+gem "yabeda-schked"
+gem "yabeda-http_requests"
+gem "http_health_check"
+gem "strong_migrations"
+gem "rails_semantic_logger"
+gem "pagy", "~> 6.0"
+
+# Sbermarket Tech gems
+gem "sbmt-outbox"
+gem "sbmt-kafka_consumer"
+
+group :development, :test do
+  gem "rspec"
+  gem "rspec_junit_formatter"
+  gem "rspec-rails"
+  gem "rspec-json_expectations"
+  gem "shoulda-matchers"
+  gem "dotenv-rails"
+  gem "bundler-audit"
+  gem "listen"
+  gem "factory_bot_rails"
+  gem "faker"
+end
+
+group :development do
+  gem "rubocop-rails"
+  gem "rubocop-rspec"
+  gem "standard"
+  gem "grpc-tools"
+end
+
+group :test do
+  gem "test-prof"
+end
