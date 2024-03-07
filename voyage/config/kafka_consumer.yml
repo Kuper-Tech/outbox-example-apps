@@ -7,7 +7,7 @@ default: &default
   client_id: voyage
   shutdown_timeout: 120
   kafka:
-    servers: <%= ENV.fetch('KAFKA_BROKERS'){ 'kafka:9092' } %>
+    servers: <%= ENV.fetch('BROKER_URL'){ 'kafka:9092' } %>
     kafka_options:
       auto.offset.reset: 'latest'
   consumer_groups:

@@ -8,29 +8,25 @@ These are example applications that use:
 ## How to run
 
 1. Install [Dip](https://github.com/bibendi/dip)
-2. Start [Kafka](./infra/) broker `cd infra && dip up`
-3. Start [Quest](./quest/) application `cd quest && dip up`
-4. Start [Voyage](./voyage/) application `cd voyage && dip up`
+2. Start [Quest](./quest/) application `cd quest && dip infra up && dip up`
+3. Start [Voyage](./voyage/) application `cd voyage && dip infra up && dip up`
 
 ## Test case
 
-1. Create an order in Quest app
+1. Create an order in the Quest app
 
 ```shell
-curl --location http://localhost:3000/api/v1/orders \
---form '[order]name=Foo' \
---form '[order]qty=3' \
---form '[order]price=42'
+curl -L http://quest.lvh.me/api/v1/orders -F '[order]name=Foo' -F '[order]qty=3' -F '[order]price=42'
 ```
 
-2. Send the order to Vayage app through Outbox pattern
+2. Send the order to the Voyage app with Outbox pattern
 
 ```shell
-curl --request POST --location http://localhost:3000/api/v1/orders/<ORDER-UUID>/completion
+curl -X POST -L  http://quest.lvh.me/api/v1/orders/ORDER-ID/completion
 ```
 
-3. Show the imported order
+3. Show the imported order in the Voyage app
 
 ```shell
-curl --location http://localhost:3001/api/v1/orders
+curl -L http://voyage.lvh.me/api/v1/orders/ORDER-ID
 ```

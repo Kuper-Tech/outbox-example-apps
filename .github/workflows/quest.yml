@@ -22,9 +22,9 @@ jobs:
           ruby-version: "3.3"
       - name: Install dependencies
         run: |
-          docker network create infranet
-          gem install dip
-          dip bundle install
+          gem install dip -v 8.0.0.rc
+          dip infra up
+          dip provision
       - name: Run linter
         run: dip rubocop
 
@@ -43,8 +43,8 @@ jobs:
           ruby-version: "3.3"
       - name: Install dependencies
         run: |
-          docker network create infranet
-          gem install dip
+          gem install dip -v 8.0.0.rc
+          dip infra up
           dip provision
       - name: Run tests
         run: dip rspec --format RspecJunitFormatter --out test-results/rspec.xml --format documentation
