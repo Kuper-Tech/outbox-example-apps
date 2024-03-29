@@ -1,4 +1,4 @@
-version: '7.5'
+version: '8.0.0.rc'
 
 environment:
   WORK_DIR: /app/${DIP_WORK_DIR_REL_PATH}
@@ -7,6 +7,14 @@ compose:
   files:
     - ./.dockerdev/docker-compose.yml
     - ./.dockerdev/docker-compose.local.yml
+
+infra:
+  nginx:
+    git: https://github.com/bibendi/dip-nginx.git
+  postgres:
+    git: https://github.com/bibendi/dip-postgres.git
+  kafka:
+    git: https://github.com/bibendi/dip-kafka.git
 
 interaction:
   bash:

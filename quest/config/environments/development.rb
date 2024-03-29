@@ -74,4 +74,6 @@ Rails.application.configure do
     level: config.log_level,
     formatter: config.rails_semantic_logger.format
   )
+
+  config.hosts << ENV["VIRTUAL_HOST"] if ENV["VIRTUAL_HOST"]
 end
