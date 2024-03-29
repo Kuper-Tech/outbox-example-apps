@@ -22,7 +22,7 @@ jobs:
           ruby-version: "3.3"
       - name: Install dependencies
         run: |
-          gem install dip -v 8.0.0.rc
+          gem install dip -v 8.0.0
           dip infra up
           dip provision
       - name: Run linter
@@ -43,7 +43,7 @@ jobs:
           ruby-version: "3.3"
       - name: Install dependencies
         run: |
-          gem install dip -v 8.0.0.rc
+          gem install dip -v 8.0.0
           dip infra up
           dip provision
       - name: Run tests
