@@ -1,4 +1,4 @@
-version: '8.0.0.rc'
+version: '8.0.0'
 
 environment:
   WORK_DIR: /app/${DIP_WORK_DIR_REL_PATH}
