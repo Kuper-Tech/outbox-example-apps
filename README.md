@@ -30,3 +30,10 @@ curl -X POST -L  http://quest.lvh.me/api/v1/orders/ORDER-ID/completion
 ```shell
 curl -L http://voyage.lvh.me/api/v1/orders/ORDER-ID
 ```
+
+## Troubleshooting
+
+Sometimes Kafka broker doesn't receive a message into the topic. In this case:
+- stop all applications with `dip down`
+- stop infra containers with `dip infra down`
+- delete kafka volumes with `docker volume rm dip-infra-kafka-latest_kafka dip-infra-kafka-latest_zookeeper`

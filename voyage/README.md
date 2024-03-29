@@ -11,6 +11,7 @@ It allows you to learn how to use the Outbox pattern and how it works with Ruby 
 1. Install deps and prepare DB
 
 ```shell
+dip infra up
 dip provision
 ```
 

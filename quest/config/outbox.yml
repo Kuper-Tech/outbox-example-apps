@@ -5,13 +5,9 @@ default: &default
 
   outbox_items:
     order_outbox_item:
-      partition_size: <%= ENV.fetch('QUEST__ORDER_OUTBOX_ITEM__PARTITION_SIZE'){ '2' } %>
       partition_strategy: hash
       retention: P3D
       max_retries: <%= ENV.fetch('QUEST__ORDER_OUTBOX_ITEM__MAX_RETRIES'){ '7' } %>
-      retry_strategies:
-        - exponential_backoff
-        - compacted_log
       transports:
         sbmt/kafka_producer:
           topic: <%= ENV.fetch('QUEST__KAFKA__TOPICS__ORDERS'){ 'yc.quest-stand.orders.0' } %>

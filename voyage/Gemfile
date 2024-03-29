@@ -31,7 +31,7 @@ gem "strong_migrations"
 gem "rails_semantic_logger"
 gem "pagy", "~> 6.0"
 
-# Sbermarket Tech gems
+# SbermarketTech gems
 gem "sbmt-outbox"
 gem "sbmt-kafka_consumer"
 

@@ -30,7 +30,7 @@ gem "http_health_check"
 gem "strong_migrations"
 gem "rails_semantic_logger"
 
-# Sbermarket Tech gems
+# SbermarketTech gems
 gem "sbmt-outbox"
 gem "sbmt-kafka_producer"
 
