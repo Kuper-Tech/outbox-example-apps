@@ -26,8 +26,8 @@ x-ruby: &ruby
   tty: true
   working_dir: ${WORK_DIR:-/app}
   volumes:
-    - ../..:/gems:cached
     - ..:/app:cached
+    - ${SBMT_RUBY_GEMS_PATH:-../..}:/gems:cached
     - .psqlrc:/root/.psqlrc:ro
     # We store Rails cache and gems in volumes to get speed up on Docker for Mac
     - rails_cache:/app/tmp/cache
